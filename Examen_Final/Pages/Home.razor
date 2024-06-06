@@ -1,7 +1,8 @@
 ﻿@page "/"
-
-<PageTitle>Home</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+@inject NavigationManager NavigationManager
+<h1>Seleccionar Cual desea ingresar</h1>
+<div class="form-group">
+    <td><button class="btn btn-primary" @onclick="@(() => NavigationManager.NavigateTo($"/Tablet"))">Tablet</button></td>
+    <td><button class="btn btn-primary" @onclick="@(() => NavigationManager.NavigateTo($"/Smartphone"))">Smartphone</button></td>
+    <td><button class="btn btn-primary" @onclick="@(() => NavigationManager.NavigateTo($"/Laptop"))">Laptop</button></td>
+</div>

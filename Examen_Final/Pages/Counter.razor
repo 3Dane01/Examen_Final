@@ -1,18 +1,73 @@
-﻿@page "/counter"
+﻿@page "/Tablet"
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+<PageTitle>Tablet</PageTitle>
 
-<PageTitle>Counter</PageTitle>
+<h1>Ingreso de datos de Tablet</h1>
 
-<h1>Counter</h1>
+<EditForm Model="@claseTablet" OnValidSubmit="@Guardar">
 
-<p role="status">Current count: @currentCount</p>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label for="NumeroSerie">Numero de Serie: </label>
+        <InputText id="NumeroSerie" @bind-Value="claseTablet.NumeroSerie" class="form-control" />
+        <ValidationMessage For="() => claseTablet.NumeroSerie" />
+    </div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    <div>
+        <label for="Marca">Marca: </label>
+        <InputText id="Marca" @bind-Value="claseTablet.Marca" class="form-control" />
+        <ValidationMessage For="() => claseTablet.Marca" />
+    </div>
+
+    <div>
+        <label for="Modelo">Modelo: </label>
+        <InputText id="NumeroSerie" @bind-Value="claseTablet.Modelo" class="form-control" />
+        <ValidationMessage For="() => claseTablet.Modelo" />
+    </div>
+
+    <div>
+        <label for="TamañoPantalla">Tamaño de Pantalla: </label>
+        <InputText id="TamañoPantalla" @bind-Value="claseTablet.TamañoPantalla" class="form-control" />
+        <ValidationMessage For="() => claseTablet.TamañoPantalla" />
+    </div>
+
+    <div class="form-group">
+        <label for="Soporte">Soporte</label>
+        <select class="form-control" @bind="@claseTablet.Soporte">
+            <option value=" "></option>
+            <option value="Si tiene soporte para lápiz óptico">Si</option>
+            <option value="No tiene soporte para lápiz óptico.">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Guardar</button>
+    </div>
+
+</EditForm>
 
 @code {
-    private int currentCount = 0;
+    Tablet claseTablet = new Tablet();
+    List<Tablet> listaTablet = new List<Tablet>();
 
-    private void IncrementCount()
+    protected async Task Guardar()
     {
-        currentCount++;
+
+        listaTablet.Add(claseTablet);
+        claseTablet = new Tablet();
+
+        await localStorage.SetItemAsync("listaTablet", listaTablet);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        listaTablet = await localStorage.GetItemAsync<List<Tablet>>("listaTablet");
+
+        if (listaTablet == null)
+        {
+            listaTablet = new List<Tablet>();
+        }
+
     }
 }
