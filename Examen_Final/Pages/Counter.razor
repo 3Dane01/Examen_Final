@@ -37,8 +37,8 @@
         <label for="Soporte">Soporte</label>
         <select class="form-control" @bind="@claseTablet.Soporte">
             <option value=" "></option>
-            <option value="Si tiene soporte para lápiz óptico">Si</option>
-            <option value="No tiene soporte para lápiz óptico.">No</option>
+            <option value="Si">Si tiene soporte para lápiz óptico</option>
+            <option value="No tiene soporte para lápiz óptico">No tiene soporte para lápiz óptico</option>
         </select>
     </div>
 
@@ -47,6 +47,35 @@
     </div>
 
 </EditForm>
+
+@if (claseTablet != null && listaTablet.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cantidad</th>
+                <th>Numero de Serie</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Tamaño de pantalla</th>
+                <th>Soporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (tablet, index) in listaTablet.Select((tablet, index) => (tablet, index)))
+            {
+                <tr>
+                    <td>@(index + 1)</td>
+                    <td>@tablet.NumeroSerie</td>
+                    <td>@tablet.Marca</td>
+                    <td>@tablet.Modelo</td>
+                    <td>@tablet.TamañoPantalla</td>
+                    <td>@tablet.Soporte</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
     Tablet claseTablet = new Tablet();
