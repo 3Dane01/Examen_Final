@@ -1,0 +1,103 @@
+﻿@page "/Tablet"
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+<PageTitle>Tablet</PageTitle>
+
+<h1>Ingreso de datos de Tablet</h1>
+
+<EditForm Model="@claseTablet" OnValidSubmit="@Guardar">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label for="NumeroSerie">Numero de Serie: </label>
+        <InputText id="NumeroSerie" @bind-Value="claseTablet.NumeroSerie" class="form-control" />
+        <ValidationMessage For="() => claseTablet.NumeroSerie" />
+    </div>
+
+    <div>
+        <label for="Marca">Marca: </label>
+        <InputText id="Marca" @bind-Value="claseTablet.Marca" class="form-control" />
+        <ValidationMessage For="() => claseTablet.Marca" />
+    </div>
+
+    <div>
+        <label for="Modelo">Modelo: </label>
+        <InputText id="NumeroSerie" @bind-Value="claseTablet.Modelo" class="form-control" />
+        <ValidationMessage For="() => claseTablet.Modelo" />
+    </div>
+
+    <div>
+        <label for="TamañoPantalla">Tamaño de Pantalla: </label>
+        <InputText id="TamañoPantalla" @bind-Value="claseTablet.TamañoPantalla" class="form-control" />
+        <ValidationMessage For="() => claseTablet.TamañoPantalla" />
+    </div>
+
+    <div class="form-group">
+        <label for="Soporte">Soporte</label>
+        <select class="form-control" @bind="@claseTablet.Soporte">
+            <option value=" "></option>
+            <option value="Si tiene soporte para lápiz óptico">Si tiene soporte para lápiz óptico</option>
+            <option value="No tiene soporte para lápiz óptico">No tiene soporte para lápiz óptico</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Guardar</button>
+    </div>
+
+</EditForm>
+
+@if (claseTablet != null && listaTablet.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cantidad</th>
+                <th>Numero de Serie</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Tamaño de pantalla</th>
+                <th>Soporte</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (tablet, index) in listaTablet.Select((tablet, index) => (tablet, index)))
+            {
+                <tr>
+                    <td>@(index + 1)</td>
+                    <td>@tablet.NumeroSerie</td>
+                    <td>@tablet.Marca</td>
+                    <td>@tablet.Modelo</td>
+                    <td>@tablet.TamañoPantalla</td>
+                    <td>@tablet.Soporte</td>
+                    <td><button class="btn btn-warning" @onclick="@(() => NavigationManager.NavigateTo($"/TabletEditar/{tablet.NumeroSerie}"))">Editar</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    Tablet claseTablet = new Tablet();
+    List<Tablet> listaTablet = new List<Tablet>();
+
+    protected async Task Guardar()
+    {
+
+        listaTablet.Add(claseTablet);
+        claseTablet = new Tablet();
+
+        await localStorage.SetItemAsync("listaTablet", listaTablet);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        listaTablet = await localStorage.GetItemAsync<List<Tablet>>("listaTablet");
+
+        if (listaTablet == null)
+        {
+            listaTablet = new List<Tablet>();
+        }
+
+    }
+}
